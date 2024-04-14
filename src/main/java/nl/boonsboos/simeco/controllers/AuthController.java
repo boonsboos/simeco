@@ -30,9 +30,9 @@ public class AuthController {
             "&scope=read:user"+
             "&allow_signup=true";
 
-    @GetMapping("/signup")
+    @GetMapping("/login")
     public RedirectView handleSignup() {
-        return new RedirectView(GITHUB_PORTAL_URL); // TODO: add GitHub OAuth portal URL here
+        return new RedirectView(GITHUB_PORTAL_URL);
     }
 
     @GetMapping("/submit")
