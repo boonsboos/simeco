@@ -10,6 +10,7 @@ import java.math.BigDecimal;
  * @param balance
  */
 public record BankAccount(
+        long accountID,
         long userID,
         long bankID,
         String accountNumber,
