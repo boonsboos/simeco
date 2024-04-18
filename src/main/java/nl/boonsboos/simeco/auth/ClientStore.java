@@ -5,6 +5,7 @@ import nl.boonsboos.simeco.entities.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Stores clients and their information.
@@ -12,8 +13,24 @@ import java.util.List;
  */
 public class ClientStore {
 
+    private static final Logger LOG = Logger.getLogger(ClientStore.class.getSimpleName());
+
+    private static boolean initialized;
     private static final List<AuthClient> clients = new ArrayList<>();
     private static final AuthClientDAO AUTH_CLIENT_DAO = new AuthClientDAO();
+
+    /**
+     * Loads most recent clients into the client store
+     */
+    public static void intialize() {
+
+        LOG.info("Initializing client store");
+
+        if (!initialized) {
+            clients.addAll(AUTH_CLIENT_DAO.getAll());
+            initialized = true;
+        }
+    }
 
     /**
      * Creates and saves the client of the user.
@@ -22,9 +39,11 @@ public class ClientStore {
     public static void saveNewClient(User user) {
 
         AuthClient client = new AuthClient(
-            user.getUserID(),
+            user.userID(),
             SecretGenerator.generateSecret()
         );
+
+        LOG.info("New player! "+user.toString());
 
         AUTH_CLIENT_DAO.save(client);
     }
@@ -36,10 +55,10 @@ public class ClientStore {
      */
     public static AuthClient getClientByUser(User user) {
         List<AuthClient> collected = clients.stream().filter(
-            client -> client.userID() == user.getUserID()
+            client -> client.userID() == user.userID()
         ).toList();
 
-        return collected.isEmpty() ? AUTH_CLIENT_DAO.get(user.getUserID()) : collected.getFirst();
+        return collected.isEmpty() ? AUTH_CLIENT_DAO.get(user.userID()) : collected.getFirst();
     }
 
     /**

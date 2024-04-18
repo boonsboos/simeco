@@ -1,34 +1,19 @@
 package nl.boonsboos.simeco.entities;
 
 /**
- * Represents a player participating in Simeco
+ * Represents a player participating in Simeco.
+ * Make sure that endpoints do not leak information that does not belong to this user.
+ *
+ * @param userID the ID of the user
+ * @param username the user's GitHub username
  */
-public class User {
-    /**
-     * The ID of the user.
-     * Make sure that endpoints do not leak information that does not belong to this user.
-     */
-    private final long userID;
-    /**
-     * The user's GitHub username
-     */
-    private final String username;
+public record User( long userID, String username) {
 
-    public User(long userID, String username) {
-        this.userID = userID;
-        this.username = username;
-    }
-
+    /**
+     * If the user has not yet been saved, use this.
+     * @param username the user's name
+     */
     public User(String username) {
-        this.userID = -1;
-        this.username = username;
-    }
-
-    public long getUserID() {
-        return userID;
-    }
-
-    public String getUsername() {
-        return username;
+        this(-1, username);
     }
 }

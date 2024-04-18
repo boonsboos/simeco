@@ -1,5 +1,7 @@
 package nl.boonsboos.simeco.entities.bank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.math.BigDecimal;
 
 /**
@@ -12,10 +14,10 @@ import java.math.BigDecimal;
  * @param vaultBalance the amount of money in the vault
  */
 public record Bank(
-        long bankID,
+        @JsonIgnore long bankID,
         String bankName,
         String bankInitials,
         float depositInterest,
         float loanInterest,
-        BigDecimal vaultBalance
+        @JsonIgnore BigDecimal vaultBalance
 ) { }
