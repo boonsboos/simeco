@@ -1,4 +1,4 @@
-package nl.boonsboos.simeco.data.bank;
+package nl.boonsboos.simeco.data.entities.bank;
 
 import nl.boonsboos.simeco.data.DatabasePool;
 import nl.boonsboos.simeco.data.SimecoDAO;

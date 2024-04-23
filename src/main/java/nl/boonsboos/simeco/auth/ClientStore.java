@@ -43,7 +43,7 @@ public class ClientStore {
             SecretGenerator.generateSecret()
         );
 
-        LOG.info("New player! "+user.toString());
+        LOG.info("New player! "+user);
 
         AUTH_CLIENT_DAO.save(client);
     }
@@ -71,6 +71,12 @@ public class ClientStore {
                 client -> client.clientSecret().equals(key)
         ).toList();
 
-        return collected.isEmpty() ? AUTH_CLIENT_DAO.verifySecret(key) : collected.getFirst();
+        if (collected.isEmpty()) {
+            AuthClient c = AUTH_CLIENT_DAO.verifySecret(key);
+            clients.add(c);
+            return c;
+        } else {
+            return collected.getFirst();
+        }
     }
 }

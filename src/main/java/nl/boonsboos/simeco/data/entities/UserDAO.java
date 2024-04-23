@@ -1,5 +1,7 @@
-package nl.boonsboos.simeco.data;
+package nl.boonsboos.simeco.data.entities;
 
+import nl.boonsboos.simeco.data.DatabasePool;
+import nl.boonsboos.simeco.data.SimecoDAO;
 import nl.boonsboos.simeco.entities.User;
 
 import java.sql.Connection;

@@ -4,12 +4,11 @@ import nl.boonsboos.simeco.Simeco;
 import nl.boonsboos.simeco.auth.AuthClient;
 import nl.boonsboos.simeco.auth.ClientStore;
 import nl.boonsboos.simeco.auth.data.AuthClientDAO;
-import nl.boonsboos.simeco.data.UserDAO;
+import nl.boonsboos.simeco.data.entities.UserDAO;
 import nl.boonsboos.simeco.entities.User;
 import nl.boonsboos.simeco.util.GitHubRequests;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
@@ -37,7 +36,7 @@ public class AuthController {
     }
 
     @GetMapping("/submit")
-    public ResponseEntity<?> finishSignup(@RequestParam String code) {
+    public ResponseEntity<?> finishLogin(@RequestParam String code) {
 
         String username = new GitHubRequests.GitHubUserName(code).getUsername();
 
