@@ -1,17 +1,17 @@
 -- copypasted from database by hand
 CREATE TABLE IF NOT EXISTS public.seuser
 (
-    userid bigint NOT NULL DEFAULT nextval('"User_UserID_seq"'::regclass),
+    userid BIGSERIAL NOT NULL,
     username text COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT "User_pkey" PRIMARY KEY (userid),
     CONSTRAINT "UQ_seuser_username" UNIQUE (username)
-)
+);
 
 CREATE TABLE IF NOT EXISTS public.servertime
 (
     "time" timestamp(0) without time zone NOT NULL,
     CONSTRAINT servertime_pkey PRIMARY KEY ("time")
-)
+);
 
 CREATE TABLE IF NOT EXISTS public.authuser
 (
@@ -22,11 +22,11 @@ CREATE TABLE IF NOT EXISTS public.authuser
         REFERENCES public.seuser (userid) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-)
+);
 
 CREATE TABLE IF NOT EXISTS public.banks
 (
-    bankid bigint NOT NULL DEFAULT nextval('banks_bankid_seq'::regclass),
+    bankid BIGSERIAL NOT NULL,
     bankname text COLLATE pg_catalog."default" NOT NULL,
     bankinitials text COLLATE pg_catalog."default" NOT NULL,
     loaninterest double precision NOT NULL DEFAULT 1.0,
@@ -35,14 +35,14 @@ CREATE TABLE IF NOT EXISTS public.banks
     CONSTRAINT "PK_banks" PRIMARY KEY (bankid),
     CONSTRAINT "UQ_Bank_bankinitials" UNIQUE (bankinitials),
     CONSTRAINT "UQ_Bank_bankname" UNIQUE (bankname)
-)
+);
 
 CREATE TABLE IF NOT EXISTS public.bankaccounts
 (
     userid bigint NOT NULL,
     bankid bigint NOT NULL,
     balance numeric(102,2) NOT NULL,
-    accountid bigint NOT NULL DEFAULT nextval('bankaccounts_accountid_seq'::regclass),
+    accountid BIGSERIAL NOT NULL,
     accountnumber text COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT bankaccounts_pkey PRIMARY KEY (accountid),
     CONSTRAINT "UQ_accountnumber" UNIQUE (accountnumber),
@@ -54,11 +54,11 @@ CREATE TABLE IF NOT EXISTS public.bankaccounts
         REFERENCES public.seuser (userid) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-)
+);
 
 CREATE TABLE IF NOT EXISTS public.transactions
 (
-    transactionid bigint NOT NULL DEFAULT nextval('transactions_transactionid_seq'::regclass),
+    transactionid BIGSERIAL NOT NULL,
     fromid bigint NOT NULL,
     toid bigint NOT NULL,
     amount numeric(102,2) NOT NULL,
@@ -74,4 +74,4 @@ CREATE TABLE IF NOT EXISTS public.transactions
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
+);
