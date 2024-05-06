@@ -32,7 +32,7 @@ public class TransactionDAO implements SimecoDAO<Transaction> {
     public List<PopulatedTransaction> getTransactionHistory(long accountID, long page) {
 
         // turn page into offset
-        long offset = (page-1) * 10;
+        long offset = (page-1) * 20;
 
         List<PopulatedTransaction> list = new ArrayList<>();
 

@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 /**
  * <b>Does not implement SimecoDAO!</b>
- * Only has queries that are useful for the {@link Server}.
+ * Only has queries that are useful for the {@link nl.boonsboos.simeco.simulation.ServerTickThread}.
  */
 public class ServerDAO {
 

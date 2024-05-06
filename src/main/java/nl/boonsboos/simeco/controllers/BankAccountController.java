@@ -42,7 +42,7 @@ public class BankAccountController {
         return ResponseEntity.ok(
             new PaginatedBankAccountListResponse(
                 page,
-                BANK_ACCOUNT_DAO.getBankAccounts(page, client.userID())
+                BANK_ACCOUNT_DAO.getBankAccountsPaginated(page, client.userID())
             )
         );
     }

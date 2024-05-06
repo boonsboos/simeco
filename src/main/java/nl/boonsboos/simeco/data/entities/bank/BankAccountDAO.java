@@ -50,7 +50,7 @@ public class BankAccountDAO implements SimecoDAO<BankAccount> {
         return null;
     }
 
-    public List<BankAccount> getBankAccounts(long offset, long userid) {
+    public List<BankAccount> getBankAccountsPaginated(long offset, long userid) {
 
         offset = (offset - 1) * 20;
 
@@ -65,6 +65,35 @@ public class BankAccountDAO implements SimecoDAO<BankAccount> {
 
             getAccounts.setLong(1, userid);
             getAccounts.setLong(2, offset);
+
+            ResultSet result = getAccounts.executeQuery();
+
+            while (result.next()) {
+                list.add(new BankAccount(
+                    result.getLong("accountid"),
+                    result.getLong("userid"),
+                    result.getLong("bankid"),
+                    result.getString("accountnumber"),
+                    result.getBigDecimal("balance")
+                ));
+            }
+        } catch (SQLException e) {
+            LOG.warning("Failed to get bank accounts: " + e.getMessage());
+        }
+
+        return list;
+    }
+
+    public List<BankAccount> getBankAccounts(long userid) {
+        List<BankAccount> list = new ArrayList<>();
+
+        try (Connection conn = DatabasePool.getConnection()) {
+            PreparedStatement getAccounts = conn.prepareStatement(
+                "SELECT * FROM bankaccounts "+
+                "WHERE userid = ? "
+            );
+
+            getAccounts.setLong(1, userid);
 
             ResultSet result = getAccounts.executeQuery();
 
@@ -205,6 +234,37 @@ public class BankAccountDAO implements SimecoDAO<BankAccount> {
             return true;
         } catch (SQLException e) {
             LOG.warning("Failed to get save new bank account: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    /**
+     * Goes over every bank account in the database and applies interest over savings.
+     * @return true on success, false otherwise
+     */
+    public boolean calculateAndApplyDepositInterestGlobally() {
+        try (Connection conn = DatabasePool.getConnection()) {
+
+            conn.setAutoCommit(false);
+            conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+
+            PreparedStatement interests = conn.prepareStatement(
+                """
+                UPDATE bankaccounts
+                SET balance = balance * (1 + (
+                (SELECT depositinterest FROM banks
+                 as a WHERE a.bankid=bankid) / 100));
+                """
+            );
+
+            interests.execute();
+
+            conn.commit();
+
+            return true;
+        } catch (SQLException e) {
+            LOG.warning("Failed to apply interest: " + e.getMessage());
         }
 
         return false;

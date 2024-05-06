@@ -1,5 +1,7 @@
 package nl.boonsboos.simeco.entities.bank;
 
+import nl.boonsboos.simeco.simulation.ServerTickThread;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -17,6 +19,6 @@ public record Transaction(
         LocalDateTime timestamp
 ) {
     public Transaction(long accountFrom, long accountTo, BigDecimal amount) {
-        this(accountFrom, accountTo, amount, LocalDateTime.now());
+        this(accountFrom, accountTo, amount, ServerTickThread.getServerTime());
     }
 }
